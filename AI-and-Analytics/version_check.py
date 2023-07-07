@@ -112,3 +112,10 @@ if torchccl_found == True:
 
 checker = arch_checker()
 print("Arch : ", checker.arch)
+import os
+os.system("pip list")
+os.system("conda list")
+os.system("sudo apt list --installed")
+os.system("sudo dnf list installed")
+os.system("sudo yum list installed")
+os.system("sudo rpm -qa")
