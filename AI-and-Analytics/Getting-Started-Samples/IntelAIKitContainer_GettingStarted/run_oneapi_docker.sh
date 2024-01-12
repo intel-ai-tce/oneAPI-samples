@@ -10,7 +10,14 @@ gpu_arg=""
 GPU_DEV=/dev/dri
 if [ -d "$GPU_DEV" ]; then
     echo "$GPU_DEV exists."
-    gpu_arg=" --device=/dev/dri --ipc=host "
+    RENDER=$(getent group render | sed -E 's,^render:[^:]*:([^:]*):.*$,\1,')
+    VIDEO=$(getent group video | sed -E 's,^video:[^:]*:([^:]*):.*$,\1,')
+    test -z "$RENDER" || RENDER_GROUP="--group-add ${RENDER}"
+    test -z "$VIDEO" || VIDEO_GROUP="--group-add ${VIDEO}"
+    echo ${RENDER_GROUP}
+    echo ${VIDEO_GROUP}
+
+    gpu_arg=" --device=/dev/dri --ipc=host ${RENDER_GROUP} ${VIDEO_GROUP} --shm-size=12G -v /dev/dri/by-path:/dev/dri/by-path  "
 fi
 
 ## remove any previously running containers
